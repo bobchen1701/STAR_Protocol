@@ -4,3 +4,4 @@ jupyter>=1.0.0
 networkx>=2.2
 POT>=0.6.0
 python-igraph>=0.7.1.post6
+leidenalg>=0.8.2
