@@ -174,8 +174,8 @@ class DR_plot:
             save_to = path to .png file to save output, or None
         """
         sns.scatterplot(
-            data[:, 0],
-            data[:, 1],
+            x=data[:, 0],
+            y=data[:, 1],
             s=pt_size,
             alpha=0.7,
             hue=color,
@@ -215,8 +215,8 @@ class DR_plot:
 
         if IDs == "all":
             self.ax.scatter(
-                plotter[:, 0],
-                plotter[:, 1],
+                x=plotter[:, 0],
+                y=plotter[:, 1],
                 s=pt_size,
                 alpha=0.7,
                 c=[cdict[x] for x in adata.obs[obs_col].astype(str)],
@@ -225,8 +225,8 @@ class DR_plot:
 
         else:
             sns.scatterplot(
-                plotter[-adata.obs[obs_col].isin(IDs), 0],
-                plotter[-adata.obs[obs_col].isin(IDs), 1],
+                x=plotter[-adata.obs[obs_col].isin(IDs), 0],
+                y=plotter[-adata.obs[obs_col].isin(IDs), 1],
                 ax=self.ax,
                 s=pt_size,
                 alpha=0.1,
@@ -235,8 +235,8 @@ class DR_plot:
                 edgecolor="none",
             )
             plt.scatter(
-                plotter[adata.obs[obs_col].isin(IDs), 0],
-                plotter[adata.obs[obs_col].isin(IDs), 1],
+                x=plotter[adata.obs[obs_col].isin(IDs), 0],
+                y=plotter[adata.obs[obs_col].isin(IDs), 1],
                 s=pt_size,
                 alpha=0.7,
                 c=[
@@ -284,8 +284,8 @@ class DR_plot:
 
         # draw points in embedding first
         sns.scatterplot(
-            adata.obsm[use_rep][:, 0],
-            adata.obsm[use_rep][:, 1],
+            x=adata.obsm[use_rep][:, 0],
+            y=adata.obsm[use_rep][:, 1],
             ax=self.ax,
             s=pt_size,
             alpha=0.1,
@@ -297,8 +297,8 @@ class DR_plot:
         # draw MST edges if desired, otherwise just draw centroids
         if not draw_edges:
             self.ax.scatter(
-                adata.uns["{}_centroids".format(use_rep)][:, 0],
-                adata.uns["{}_centroids".format(use_rep)][:, 1],
+                x=adata.uns["{}_centroids".format(use_rep)][:, 0],
+                y=adata.uns["{}_centroids".format(use_rep)][:, 1],
                 s=ctr_size,
                 c=colors,
                 edgecolor="none",
@@ -691,18 +691,17 @@ class SP_plot:
         )
         self.fig.plot_joint(plt.hist2d, bins=50, cmap=self.cmap)
         sns.kdeplot(
-            self.pre,
+            x=self.pre,
             color=self.palette[-1],
             shade=False,
-            bw=0.01,
+            bw_method=0.01,
             ax=self.fig.ax_marg_x,
         )
         sns.kdeplot(
-            self.post,
+            y=self.post,
             color=self.palette[2],
             shade=False,
-            bw=0.01,
-            vertical=True,
+            bw_method=0.01,
             ax=self.fig.ax_marg_y,
         )
         self.fig.ax_joint.plot(
@@ -802,27 +801,27 @@ def cluster_arrangement(
     g = sns.JointGrid(x=dist, y=post, space=0, height=figsize[0])
     g.plot_joint(plt.hist2d, bins=50, cmap=sns.cubehelix_palette(as_cmap=True))
     sns.kdeplot(
-        dist_norm_0_1,
+        x=dist_norm_0_1,
         shade=False,
-        bw=0.01,
+        bw_method=0.01,
         ax=g.ax_marg_x,
         color="darkorange",
         label=cluster_names[0] + " - " + cluster_names[1],
         legend=legend,
     )
     sns.kdeplot(
-        dist_norm_0_2,
+        x=dist_norm_0_2,
         shade=False,
-        bw=0.01,
+        bw_method=0.01,
         ax=g.ax_marg_x,
         color="darkgreen",
         label=cluster_names[0] + " - " + cluster_names[2],
         legend=legend,
     )
     sns.kdeplot(
-        dist_norm_1_2,
+        x=dist_norm_1_2,
         shade=False,
-        bw=0.01,
+        bw_method=0.01,
         ax=g.ax_marg_x,
         color="darkred",
         label=cluster_names[1] + " - " + cluster_names[2],
@@ -832,26 +831,23 @@ def cluster_arrangement(
         g.ax_marg_x.legend(loc=(1.01, 0.1))
 
     sns.kdeplot(
-        post_norm_0_1,
+        y=post_norm_0_1,
         shade=False,
-        bw=0.01,
-        vertical=True,
+        bw_method=0.01,
         color="darkorange",
         ax=g.ax_marg_y,
     )
     sns.kdeplot(
-        post_norm_0_2,
+        y=post_norm_0_2,
         shade=False,
-        bw=0.01,
-        vertical=True,
+        bw_method=0.01,
         color="darkgreen",
         ax=g.ax_marg_y,
     )
     sns.kdeplot(
-        post_norm_1_2,
+        y=post_norm_1_2,
         shade=False,
-        bw=0.01,
-        vertical=True,
+        bw_method=0.01,
         color="darkred",
         ax=g.ax_marg_y,
     )
@@ -951,7 +947,7 @@ def cluster_arrangement_sc(
     sns.kdeplot(
         dist_norm_0_1,
         shade=False,
-        bw=0.01,
+        bw_method=0.01,
         ax=g.ax_marg_x,
         color="darkorange",
         label=ID_names[0] + " - " + ID_names[1],
@@ -960,7 +956,7 @@ def cluster_arrangement_sc(
     sns.kdeplot(
         dist_norm_0_2,
         shade=False,
-        bw=0.01,
+        bw_method=0.01,
         ax=g.ax_marg_x,
         color="darkgreen",
         label=ID_names[0] + " - " + ID_names[2],
@@ -969,7 +965,7 @@ def cluster_arrangement_sc(
     sns.kdeplot(
         dist_norm_1_2,
         shade=False,
-        bw=0.01,
+        bw_method=0.01,
         ax=g.ax_marg_x,
         color="darkred",
         label=ID_names[1] + " - " + ID_names[2],
@@ -979,26 +975,23 @@ def cluster_arrangement_sc(
         g.ax_marg_x.legend(loc=(1.01, 0.1))
 
     sns.kdeplot(
-        post_norm_0_1,
+        y=post_norm_0_1,
         shade=False,
-        bw=0.01,
-        vertical=True,
+        bw_method=0.01,
         color="darkorange",
         ax=g.ax_marg_y,
     )
     sns.kdeplot(
-        post_norm_0_2,
+        y=post_norm_0_2,
         shade=False,
-        bw=0.01,
-        vertical=True,
+        bw_method=0.01,
         color="darkgreen",
         ax=g.ax_marg_y,
     )
     sns.kdeplot(
-        post_norm_1_2,
+        y=post_norm_1_2,
         shade=False,
-        bw=0.01,
-        vertical=True,
+        bw_method=0.01,
         color="darkred",
         ax=g.ax_marg_y,
     )
