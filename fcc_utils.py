@@ -20,6 +20,7 @@ from sklearn.preprocessing import normalize
 
 import seaborn as sns
 
+sc.set_figure_params(dpi=90, color_map="viridis")
 sns.set(style="white")
 
 
