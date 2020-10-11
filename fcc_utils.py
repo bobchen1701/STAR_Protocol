@@ -64,7 +64,7 @@ def knn_graph(dist_matrix, k, adata, save_rep="knn"):
 def subset_uns_by_ID(adata, uns_keys, obs_col, IDs):
     """
     subset symmetrical distance matrices and knn graphs in adata.uns by one or more IDs defined in adata.obs
-        adata = AnnData object 
+        adata = AnnData object
         uns_keys = list of keys in adata.uns to subset. new adata.uns keys will be saved with ID appended to name
             (i.e. adata.uns['knn'] -> adata.uns['knn_ID1'])
         obs_col = name of column in adata.obs to use as cell IDs (i.e. 'louvain')
@@ -198,20 +198,36 @@ class DR_plot:
         else:
             plt.savefig(fname=save_to, transparent=True, bbox_inches="tight", dpi=1000)
 
-    def plot_IDs(self, adata, use_rep, obs_col, IDs="all", pt_size=75, save_to=None):
+    def plot_IDs(
+        self, adata, use_rep, obs_col="leiden", IDs="all", pt_size=75, save_to=None
+    ):
         """
         general plotting function for dimensionality reduction outputs with cute arrows and labels
             adata = anndata object to pull dimensionality reduction from
             use_rep = adata.obsm key to plot from (i.e. 'X_pca')
-            obs_col = name of column in adata.obs to use as cell IDs (i.e. 'louvain')
+            obs_col = name of column in adata.obs to use as cell IDs (i.e. 'leiden')
             IDs = list of IDs to plot, graying out cells not assigned to those IDS (default 'all' IDs)
             pt_size = size of points in plot
             save_to = path to .png file to save output, or None
         """
         plotter = adata.obsm[use_rep]
-        # get color mapping from obs_col
         clu_names = adata.obs[obs_col].unique().astype(str)
-        colors = self.cmap(np.linspace(0, 1, len(clu_names)))
+
+        # use existing scanpy colors, if applicable
+        if obs_col == "leiden":
+            colors = [
+                adata.uns["leiden_colors"][x]
+                for x in adata.obs.leiden.unique().astype(int)
+            ]
+        elif obs_col == "louvain":
+            colors = [
+                adata.uns["louvain_colors"][x]
+                for x in adata.obs.leiden.unique().astype(int)
+            ]
+        # otherwise, get new color mapping from obs_col using self.cmap
+        else:
+            colors = self.cmap(np.linspace(0, 1, len(clu_names)))
+
         cdict = dict(zip(clu_names, colors))
 
         if IDs == "all":
@@ -258,7 +274,7 @@ class DR_plot:
         self,
         adata,
         use_rep,
-        obs_col,
+        obs_col="leiden",
         ctr_size=300,
         pt_size=75,
         draw_edges=True,
@@ -269,7 +285,7 @@ class DR_plot:
         general plotting function for dimensionality reduction outputs with cute arrows and labels
             adata = anndata object to pull dimensionality reduction from
             use_rep = adata.obsm key to plot from (i.e. 'X_pca')
-            obs_col = name of column in adata.obs to use as cell IDs (i.e. 'louvain')
+            obs_col = name of column in adata.obs to use as cell IDs (i.e. 'leiden')
             ctr_size = size of centroid points in plot
             pt_size = size of points in plot
             draw_edges = draw edges of minimum spanning tree between all centroids?
@@ -279,9 +295,21 @@ class DR_plot:
                 but not in 'X_umap_centroids'. highlight the edges to show this.
             save_to = path to .png file to save output, or None
         """
-        # get color mapping from obs_col
         clu_names = adata.obs[obs_col].unique().astype(str)
-        colors = self.cmap(np.linspace(0, 1, len(clu_names)))
+        # use existing scanpy colors, if applicable
+        if obs_col == "leiden":
+            colors = [
+                adata.uns["leiden_colors"][x]
+                for x in adata.obs.leiden.unique().astype(int)
+            ]
+        elif obs_col == "louvain":
+            colors = [
+                adata.uns["louvain_colors"][x]
+                for x in adata.obs.leiden.unique().astype(int)
+            ]
+        # otherwise, get new color mapping from obs_col using self.cmap
+        else:
+            colors = self.cmap(np.linspace(0, 1, len(clu_names)))
 
         # draw points in embedding first
         sns.scatterplot(
@@ -682,7 +710,7 @@ class SP_plot:
 
     def joint_plot_distance_correlation(self, save_to=None):
         """
-        plot correlation of all unique cell-cell distances before and after some transformation. 
+        plot correlation of all unique cell-cell distances before and after some transformation.
         includes marginal plots of each distribution.
             save_to = path to .png file to save output, or None
         """
