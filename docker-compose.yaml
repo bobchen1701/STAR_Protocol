@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  ref:
+    build:
+      context: .
+      args:
+        - SINGULARITY_VERSION=3.7.0
+    volumes:
+      - type: bind
+        source: ./input_files
+        target: /input_files
