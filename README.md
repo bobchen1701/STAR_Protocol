@@ -1,5 +1,3 @@
-# STAR_Protocol
-
 # Processing single-cell RNA-seq data for dimension reduction-based analyses using open-source tools
 
 ### Install Dependencies
