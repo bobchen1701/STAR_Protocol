@@ -1,5 +1,7 @@
 # STAR_Protocol
 
+# Processing single-cell RNA-seq data for dimension reduction-based analyses using open-source tools
+
 ### Install Dependencies
 The environment for Step 1 of this protocol require Singularity. The details of this installation can be found in the [Step 1 notebook](https://github.com/KenLauLab/STAR_Protocol/blob/master/Step_1_Bioinformatics_Pipeline.ipynb).
 
