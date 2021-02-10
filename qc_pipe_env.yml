@@ -104,4 +104,4 @@ dependencies:
   - zstd=1.4.5=h9ceee32_0
   - pip:
     - dropkick==1.2.1
-prefix: /home/bob/anaconda3/envs/qc_pipe
+#prefix: /home/bob/anaconda3/envs/qc_pipe
